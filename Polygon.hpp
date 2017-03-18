@@ -72,6 +72,13 @@ public:
 
 		m_tx = &tex;
 	}
+
+	void setColor(sf::Color c) {
+		for(auto& v: m_arr) {
+			v.color = c;
+		}
+	}
+
 	void setVertices(const std::vector<sf::Vector2f>& vertices) {
 		for(auto i = 0u; i < vertices.size(); ++i) {
 			m_arr[i].position = vertices[i];
