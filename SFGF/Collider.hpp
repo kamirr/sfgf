@@ -21,7 +21,7 @@ namespace sfgf {
 		bool collides(const Collider& poly);
 	};
 
-	static bool Collider::lineIntersection(sf::Vector2f p1, sf::Vector2f q1, sf::Vector2f p2, sf::Vector2f q2)  {
+	bool Collider::lineIntersection(sf::Vector2f p1, sf::Vector2f q1, sf::Vector2f p2, sf::Vector2f q2) {
 		auto isOnSegment = [](sf::Vector2f p, sf::Vector2f q, sf::Vector2f r) {
 			return (q.x <= std::max(p.x, r.x) && q.x >= std::min(p.x, r.x) &&
 					q.y <= std::max(p.y, r.y) && q.y >= std::min(p.y, r.y));
