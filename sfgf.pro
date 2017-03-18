@@ -10,4 +10,5 @@ HEADERS += \
     SFGF/CopyLock.hpp \
     SFGF/GameObject.hpp \
     SFGF/Polygon.hpp \
-    SFGF/Plane.hpp
+    SFGF/Plane.hpp \
+    SFGF/Collider.hpp
