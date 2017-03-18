@@ -2,6 +2,7 @@
 #define GAMEOBJECT_HPP
 
 #include <SFML/Graphics/Transformable.hpp>
+#include <SFML/System/Time.hpp>
 #include "CopyLock.hpp"
 
 namespace sfgf {
@@ -26,6 +27,9 @@ namespace sfgf {
 
 			return sf::Transformable::getTransform();
 		}
+
+		virtual void update(sf::Time)
+		{ }
 	};
 }
 
