@@ -1,23 +1,29 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
-#include "Plane.hpp"
+#include "SFGF/Plane.hpp"
 #include <iostream>
 
 int main() {
-	Plane p1;
+	sfgf::Plane p1;
 	p1.setPosition({400, 300});
 	p1.setSize({200, 200});
 	p1.selfCenter();
 
-	Plane p2;
-	p2.setSize({50, 50});
-	p2.setRotation(45);
-	p2.selfCenter();
-
 	sf::Texture tx;
 	tx.loadFromFile("img.png");
 	p1.setTexture(tx);
-	p2.setTexture(tx);
+
+	sfgf::Polygon p2(3);
+	p2.setVertices({
+		{0, 0},
+		{40, 16},
+		{16, 40}}
+	);
+	p2.setTexture(tx, {
+		{0, 0},
+		{tx.getSize().x, 0},
+		{0, tx.getSize().y}
+	});
 
 	sf::RenderWindow app({800, 600, 32}, "app");
 	app.setFramerateLimit(60);
@@ -33,7 +39,7 @@ int main() {
 		app.clear({20, 20, 20});
 
 		p2.setPosition(app.mapPixelToCoords(sf::Mouse::getPosition(app)));
-		std::cout << p1.collides(p2) << std::endl;
+		p2.setColor(p1.collides(p2) ? sf::Color{255, 0, 0} : sf::Color{255, 255, 255});
 
 		app.draw(p1);
 		app.draw(p2);
