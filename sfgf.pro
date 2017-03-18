@@ -7,7 +7,7 @@ SOURCES += main.cpp
 LIBS += -lsfml-graphics -lsfml-window -lsfml-system
 
 HEADERS += \
-    CopyLock.hpp \
-    GameObject.hpp \
-    Polygon.hpp \
-    Plane.hpp
+    SFGF/CopyLock.hpp \
+    SFGF/GameObject.hpp \
+    SFGF/Polygon.hpp \
+    SFGF/Plane.hpp
