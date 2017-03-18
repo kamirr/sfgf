@@ -25,10 +25,16 @@ int main() {
 		{0, tx.getSize().y}
 	});
 
-	sf::RenderWindow app({800, 600, 32}, "app");
-	app.setFramerateLimit(60);
+	p1.setSampleCollider(p1.getDefaultSampleCollider());
+	p2.setSampleCollider(p2.getDefaultSampleCollider());
 
+	sf::RenderWindow app({800, 600, 32}, "app");
+
+	sf::Clock timer;
 	while(app.isOpen()) {
+		auto dt = timer.restart();
+		std::cout << 1 / dt.asSeconds() << std::endl;
+
 		for(sf::Event ev; app.pollEvent(ev);) {
 			if(ev.type == sf::Event::Closed) {
 				app.close();
@@ -37,6 +43,9 @@ int main() {
 		}
 
 		app.clear({20, 20, 20});
+
+		p1.update(sf::Time::Zero);
+		p2.update(sf::Time::Zero);
 
 		p2.setPosition(app.mapPixelToCoords(sf::Mouse::getPosition(app)));
 		p2.setColor(p1.collides(p2) ? sf::Color{255, 0, 0} : sf::Color{255, 255, 255});
