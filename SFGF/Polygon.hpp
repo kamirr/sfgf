@@ -12,7 +12,9 @@ namespace sfgf {
 		: public GameObject
 		, public sf::Drawable {
 	private:
-		Collider collider;
+		Collider sample_collider;
+		Collider tranformed_collider;
+
 		std::vector<sf::Vertex> m_arr;
 		const sf::Texture *m_tx = nullptr;
 
@@ -52,25 +54,40 @@ namespace sfgf {
 			return m_arr;
 		}
 
-		void updateCollider() {
-			collider.clear();
+		void setSampleCollider(const Collider& c) {
+			sample_collider = c;
+		}
+		Collider getSampleCollider() {
+			return sample_collider;
+		}
+		Collider getTransformedCollider() {
+			return tranformed_collider;
+		}
+		Collider getDefaultSampleCollider() {
+			Collider result;
 			for(sf::Vertex& v: m_arr) {
-				collider.push_back(getTransform().transformPoint(v.position));
+				result.push_back(v.position);
 			}
+
+			return result;
 		}
 
+		void updateCollider() {
+			tranformed_collider = sample_collider;
+			tranformed_collider.apply_transform(getTransform());
+		}
 		virtual void update(sf::Time) {
 			updateCollider();
 		}
 
 		bool intersects(Polygon& poly) {
-			return collider.intersects(poly.collider);
-		}
-		bool contains(sf::Vector2f point) {
-			return collider.contains(point);
+			return tranformed_collider.intersects(poly.getTransformedCollider());
 		}
 		bool collides(Polygon& poly) {
-			return collider.collides(poly.collider);
+			return tranformed_collider.collides(poly.getTransformedCollider());
+		}
+		bool contains(sf::Vector2f point) {
+			return tranformed_collider.contains(point);
 		}
 	};
 }

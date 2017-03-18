@@ -1,6 +1,7 @@
 #ifndef COLLIDER_HPP
 #define COLLIDER_HPP
 
+#include <SFML/Graphics/Transform.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <vector>
 
@@ -8,6 +9,16 @@ class Collider {
 	std::vector<sf::Vector2f> m_arr;
 
 public:
+	void apply_transform(const sf::Transform& t) {
+		std::transform(
+			m_arr.begin(),
+			m_arr.end(),
+			m_arr.begin(),
+			[&t](sf::Vector2f p) {
+				return t.transformPoint(p);
+			}
+		);
+	}
 	void push_back(sf::Vector2f pt) {
 		m_arr.push_back(pt);
 	}
@@ -54,7 +65,7 @@ public:
 	}
 
 
-	bool intersects(Collider& poly) {
+	bool intersects(const Collider& poly) {
 		auto arr = m_arr;
 		arr.push_back(arr.front());
 
@@ -92,7 +103,7 @@ public:
 		  return c;
 	}
 
-	bool collides(Collider& poly) {
+	bool collides(const Collider& poly) {
 		if(intersects(poly)) {
 			return true;
 		}
