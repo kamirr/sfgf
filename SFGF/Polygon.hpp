@@ -26,70 +26,91 @@ namespace sfgf {
 		}
 
 	public:
-		Polygon(size_t size) {
-			m_arr.resize(size);
-			m_arr.shrink_to_fit();
-		}
+		Polygon(size_t size);
 
-		void setTexture(const sf::Texture& tex, const std::vector<sf::Vector2f>& texCorrds) {
-			for(auto i = 0u; i < texCorrds.size(); ++i) {
-				m_arr[i].texCoords = texCorrds[i];
-			}
+		void setTexture(const sf::Texture& tex, const std::vector<sf::Vector2f>& texCorrds);
 
-			m_tx = &tex;
-		}
+		void setColor(sf::Color c);
 
-		void setColor(sf::Color c) {
-			for(auto& v: m_arr) {
-				v.color = c;
-			}
-		}
+		void setVertices(const std::vector<sf::Vector2f>& vertices);
+		const std::vector<sf::Vertex>& getVertices();
 
-		void setVertices(const std::vector<sf::Vector2f>& vertices) {
-			for(auto i = 0u; i < vertices.size(); ++i) {
-				m_arr[i].position = vertices[i];
-			}
-		}
-		const std::vector<sf::Vertex>& getVertices() {
-			return m_arr;
-		}
+		void setSampleCollider(const Collider& c);
+		Collider getSampleCollider();
+		Collider getTransformedCollider();
+		Collider getDefaultSampleCollider();
 
-		void setSampleCollider(const Collider& c) {
-			sample_collider = c;
-		}
-		Collider getSampleCollider() {
-			return sample_collider;
-		}
-		Collider getTransformedCollider() {
-			return tranformed_collider;
-		}
-		Collider getDefaultSampleCollider() {
-			Collider result;
-			for(sf::Vertex& v: m_arr) {
-				result.push_back(v.position);
-			}
+		void updateCollider();
+		virtual void update(sf::Time);
 
-			return result;
-		}
-
-		void updateCollider() {
-			tranformed_collider = sample_collider;
-			tranformed_collider.apply_transform(getTransform());
-		}
-		virtual void update(sf::Time) {
-			updateCollider();
-		}
-
-		bool intersects(Polygon& poly) {
-			return tranformed_collider.intersects(poly.getTransformedCollider());
-		}
-		bool collides(Polygon& poly) {
-			return tranformed_collider.collides(poly.getTransformedCollider());
-		}
-		bool contains(sf::Vector2f point) {
-			return tranformed_collider.contains(point);
-		}
+		bool contains(sf::Vector2f point);
+		bool intersects(Polygon& poly);
+		bool collides(Polygon& poly);
 	};
+
+	Polygon::Polygon(size_t size) {
+		m_arr.resize(size);
+		m_arr.shrink_to_fit();
+	}
+
+	void Polygon::setTexture(const sf::Texture& tex, const std::vector<sf::Vector2f>& texCorrds) {
+		for(auto i = 0u; i < texCorrds.size(); ++i) {
+			m_arr[i].texCoords = texCorrds[i];
+		}
+
+		m_tx = &tex;
+	}
+
+	void Polygon::setColor(sf::Color c) {
+		for(auto& v: m_arr) {
+			v.color = c;
+		}
+	}
+
+	void Polygon::setVertices(const std::vector<sf::Vector2f>& vertices) {
+		for(auto i = 0u; i < vertices.size(); ++i) {
+			m_arr[i].position = vertices[i];
+		}
+	}
+	const std::vector<sf::Vertex>& Polygon::getVertices() {
+		return m_arr;
+	}
+
+	void Polygon::setSampleCollider(const Collider& c) {
+		sample_collider = c;
+	}
+	Collider Polygon::getSampleCollider() {
+		return sample_collider;
+	}
+	Collider Polygon::getTransformedCollider() {
+		return tranformed_collider;
+	}
+	Collider Polygon::getDefaultSampleCollider() {
+		Collider result;
+		for(sf::Vertex& v: m_arr) {
+			result.push_back(v.position);
+		}
+
+		return result;
+	}
+
+	void Polygon::updateCollider() {
+		tranformed_collider = sample_collider;
+		tranformed_collider.apply_transform(getTransform());
+	}
+	void Polygon::update(sf::Time) {
+		updateCollider();
+	}
+
+	bool Polygon::intersects(Polygon& poly) {
+		return tranformed_collider.intersects(poly.getTransformedCollider());
+	}
+	bool Polygon::collides(Polygon& poly) {
+		return tranformed_collider.collides(poly.getTransformedCollider());
+	}
+	bool Polygon::contains(sf::Vector2f point) {
+		return tranformed_collider.contains(point);
+	}
 }
 
 #endif // POLYGON_HPP
