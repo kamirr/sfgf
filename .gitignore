@@ -1,4 +1,5 @@
-*.pro.user
 *qmake.stash
+*.pro.user
 Makefile
 sfgf
+*.o
