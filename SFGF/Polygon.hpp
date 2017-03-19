@@ -46,11 +46,12 @@ namespace sfgf {
 		bool contains(sf::Vector2f point);
 		bool intersects(Polygon& poly);
 		bool collides(Polygon& poly);
+
+		sf::FloatRect getGlobalBounds();
 	};
 
 	Polygon::Polygon(size_t size) {
 		m_arr.resize(size);
-		m_arr.shrink_to_fit();
 	}
 
 	void Polygon::setTexture(const sf::Texture& tex, const std::vector<sf::Vector2f>& texCorrds) {
@@ -110,6 +111,10 @@ namespace sfgf {
 	}
 	bool Polygon::contains(sf::Vector2f point) {
 		return tranformed_collider.contains(point);
+	}
+
+	sf::FloatRect Polygon::getGlobalBounds() {
+		return tranformed_collider.getGlobalBounds();
 	}
 }
 
