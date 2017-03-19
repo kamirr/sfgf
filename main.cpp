@@ -1,41 +1,62 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
+#include "SFGF/ObjectPack.hpp"
 #include "SFGF/Plane.hpp"
 #include <iostream>
+#include <random>
+#include <memory>
+
+struct Rect {
+	std::shared_ptr<sfgf::Plane> plane;
+	sf::Vector2f unit;
+
+	Rect(std::default_random_engine& en) {
+		plane = std::make_shared<sfgf::Plane>();
+		sfgf::Plane& obj = *plane;
+
+		std::uniform_real_distribution<float> left(0, 780);
+		std::uniform_real_distribution<float> top(0, 580);
+
+		obj.setPosition({left(en), top(en)});
+		obj.setSize({20, 20});
+
+		std::uniform_real_distribution<float> up(-3, 3);
+		std::uniform_int_distribution<int> dir(0, 1);
+		unit.y = up(en);
+		unit.x = std::sqrt(9 - unit.y * unit.y) * (dir(en) * 2 - 1);
+	}
+
+	void move() {
+		plane->move(unit);
+		auto pos = plane->getPosition();
+		if(pos.x < 0 || pos.x > 780) {
+			unit.x *= -1;
+		}
+		if(pos.y < 0 || pos.y > 580) {
+			unit.y *= -1;
+		}
+	}
+};
 
 int main() {
-	sf::Texture tx;
-	tx.loadFromFile("img.png");
-
-	sfgf::Plane p1;
-	p1.setPosition({400, 300});
-	p1.setSize({200, 200});
-	p1.selfCenter();
-	p1.setTexture(tx);
-
-	sfgf::Polygon p2(3);
-	p2.setVertices({
-		{0, 0},
-		{40, 16},
-		{16, 40}}
-	);
-	p2.setTexture(tx, {
-		{0, 0},
-		{tx.getSize().x, 0},
-		{0, tx.getSize().y}
-	});
-
-	sfgf::Plane p3;
-	p3.setColor({255, 255, 255, 50});
-
 	sf::RenderWindow app({800, 600, 32}, "app");
+
+	std::default_random_engine en{std::random_device{}()};
+
+	std::vector<Rect> rectangles;
+	sfgf::ObjectPack pack;
+
+	for(auto i = 0u; i < 500; ++i) {
+		rectangles.emplace_back(en);
+		pack.add(*rectangles.back().plane);
+	}
 
 	sf::Clock timer;
 	while(app.isOpen()) {
 		auto dt = timer.restart();
 		std::cout << 1 / dt.asSeconds() << std::endl;
 
-		sfgf::GameObject::updateAll(dt);
+		pack.update(dt);
 		for(sf::Event ev; app.pollEvent(ev);) {
 			if(ev.type == sf::Event::Closed) {
 				app.close();
@@ -45,18 +66,23 @@ int main() {
 
 		app.clear({20, 20, 20});
 
-		p1.rotate(dt.asSeconds() * 120);
+		for(auto i = 0u; i < rectangles.size(); ++i) {
+			auto& obj1 = *rectangles[i].plane;
 
-		p3.setPosition({p1.getGlobalBounds().left, p1.getGlobalBounds().top});
-		p3.setSize({p1.getGlobalBounds().width, p1.getGlobalBounds().height});
+			for(auto j = i + 1; j < rectangles.size(); ++j) {
+				auto& obj2 = *rectangles[j].plane;
 
-		p2.setPosition(app.mapPixelToCoords(sf::Mouse::getPosition(app)));
-		p1.setColor(p1.collides(p2) ? sf::Color{255, 0, 0} : sf::Color{255, 255, 255});
-		p3.setColor(p3.collides(p2) ? sf::Color{255, 0, 0, 50} : sf::Color{255, 255, 255, 50});
+				if(obj1.collides(obj2)) {
+					obj1.setColor(sf::Color{230, 20, 20, 30});
+					obj2.setColor(sf::Color{230, 20, 20, 30});
+				}
+			}
 
-		app.draw(p1);
-		app.draw(p2);
-		app.draw(p3);
+			app.draw(obj1);
+			obj1.setColor(sf::Color{230, 230, 230, 30});
+			rectangles[i].move();
+
+		}
 
 		app.display();
 	}
