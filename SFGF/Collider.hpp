@@ -43,9 +43,9 @@ namespace sfgf {
 			return m_globalBounds;
 		}
 
-		bool intersects(const Collider& poly);
-		bool contains(sf::Vector2f point);
-		bool collides(const Collider& poly);
+		bool intersects(const Collider& poly) const;
+		bool contains(sf::Vector2f point) const;
+		bool collides(const Collider& poly) const;
 	};
 
 	Collider Collider::circle(float radius, size_t cnt) {
@@ -128,7 +128,7 @@ namespace sfgf {
 		updateGlobalBounds();
 	}
 
-	bool Collider::intersects(const Collider& poly) {
+	bool Collider::intersects(const Collider& poly) const {
 		if(!getGlobalBounds().intersects(poly.getGlobalBounds())
 		|| poly.m_arr.empty()
 		|| m_arr.empty()) {
@@ -155,7 +155,7 @@ namespace sfgf {
 
 		return false;
 	}
-	bool Collider::contains(sf::Vector2f point) {
+	bool Collider::contains(sf::Vector2f point) const {
 		int i, j, nvert = m_arr.size();
 		bool c = false;
 
@@ -172,7 +172,7 @@ namespace sfgf {
 		  return c;
 	}
 
-	bool Collider::collides(const Collider& poly) {
+	bool Collider::collides(const Collider& poly) const {
 		if(intersects(poly)) {
 			return true;
 		}
