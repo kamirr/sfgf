@@ -11,6 +11,29 @@ namespace sfgf {
 		std::vector<sf::Vector2f> m_arr;
 		sf::FloatRect m_globalBounds;
 
+		static bool nonnegatively_dimensional_rect_intersection(sf::FloatRect lhs, sf::FloatRect rhs) {
+			lhs.top = std::abs(lhs.top);
+			lhs.left = std::abs(lhs.left);
+
+			rhs.top = std::abs(rhs.top);
+			rhs.left = std::abs(rhs.left);
+
+			if(lhs.left > rhs.left + rhs.width) {
+				return false;
+			}
+			if(lhs.left + lhs.width < rhs.left) {
+				return false;
+			}
+			if(lhs.top > rhs.top + rhs.height) {
+				return false;
+			}
+			if(lhs.top + lhs.height < rhs.top) {
+				return false;
+			}
+
+			return true;
+		}
+
 		void updateGlobalBounds() {
 			sf::Vector2f max {0, 0};
 			sf::Vector2f pos {m_arr.empty() ? sf::Vector2f{0, 0} : m_arr[0]};
@@ -129,7 +152,7 @@ namespace sfgf {
 	}
 
 	bool Collider::intersects(const Collider& poly) const {
-		if(!getGlobalBounds().intersects(poly.getGlobalBounds())
+		if(!nonnegatively_dimensional_rect_intersection(getGlobalBounds(), poly.getGlobalBounds())
 		|| poly.m_arr.empty()
 		|| m_arr.empty()) {
 			return false;
