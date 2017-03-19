@@ -33,21 +33,21 @@ namespace sfgf {
 		void setColor(sf::Color c);
 
 		void setVertices(const std::vector<sf::Vector2f>& vertices);
-		const std::vector<sf::Vertex>& getVertices();
+		const std::vector<sf::Vertex>& getVertices() const;
 
 		void setSampleCollider(const Collider& c);
-		Collider getSampleCollider();
-		Collider getTransformedCollider();
-		Collider getDefaultSampleCollider();
+		Collider getSampleCollider() const;
+		Collider getTransformedCollider() const;
+		Collider getDefaultSampleCollider() const;
 
 		void updateCollider();
 		virtual void update(sf::Time);
 
-		bool contains(sf::Vector2f point);
-		bool intersects(Polygon& poly);
-		bool collides(Polygon& poly);
+		bool contains(sf::Vector2f point) const;
+		bool intersects(Polygon& poly) const;
+		bool collides(Polygon& poly) const;
 
-		sf::FloatRect getGlobalBounds();
+		sf::FloatRect getGlobalBounds() const;
 	};
 
 	Polygon::Polygon(size_t size) {
@@ -72,23 +72,25 @@ namespace sfgf {
 		for(auto i = 0u; i < vertices.size(); ++i) {
 			m_arr[i].position = vertices[i];
 		}
+
+		setSampleCollider(getDefaultSampleCollider());
 	}
-	const std::vector<sf::Vertex>& Polygon::getVertices() {
+	const std::vector<sf::Vertex>& Polygon::getVertices() const {
 		return m_arr;
 	}
 
 	void Polygon::setSampleCollider(const Collider& c) {
 		sample_collider = c;
 	}
-	Collider Polygon::getSampleCollider() {
+	Collider Polygon::getSampleCollider() const {
 		return sample_collider;
 	}
-	Collider Polygon::getTransformedCollider() {
+	Collider Polygon::getTransformedCollider() const {
 		return tranformed_collider;
 	}
-	Collider Polygon::getDefaultSampleCollider() {
+	Collider Polygon::getDefaultSampleCollider() const {
 		Collider result;
-		for(sf::Vertex& v: m_arr) {
+		for(const sf::Vertex& v: m_arr) {
 			result.push_back(v.position);
 		}
 
@@ -103,17 +105,17 @@ namespace sfgf {
 		updateCollider();
 	}
 
-	bool Polygon::intersects(Polygon& poly) {
+	bool Polygon::intersects(Polygon& poly) const {
 		return tranformed_collider.intersects(poly.getTransformedCollider());
 	}
-	bool Polygon::collides(Polygon& poly) {
+	bool Polygon::collides(Polygon& poly) const {
 		return tranformed_collider.collides(poly.getTransformedCollider());
 	}
-	bool Polygon::contains(sf::Vector2f point) {
+	bool Polygon::contains(sf::Vector2f point) const {
 		return tranformed_collider.contains(point);
 	}
 
-	sf::FloatRect Polygon::getGlobalBounds() {
+	sf::FloatRect Polygon::getGlobalBounds() const {
 		return tranformed_collider.getGlobalBounds();
 	}
 }
