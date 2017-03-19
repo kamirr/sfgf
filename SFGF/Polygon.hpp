@@ -36,8 +36,8 @@ namespace sfgf {
 		const std::vector<sf::Vertex>& getVertices() const;
 
 		void setSampleCollider(const Collider& c);
-		Collider getSampleCollider() const;
-		Collider getTransformedCollider() const;
+		const Collider &getSampleCollider() const;
+		const Collider &getTransformedCollider() const;
 		Collider getDefaultSampleCollider() const;
 
 		void updateCollider();
@@ -82,10 +82,10 @@ namespace sfgf {
 	void Polygon::setSampleCollider(const Collider& c) {
 		sample_collider = c;
 	}
-	Collider Polygon::getSampleCollider() const {
+	const Collider& Polygon::getSampleCollider() const {
 		return sample_collider;
 	}
-	Collider Polygon::getTransformedCollider() const {
+	const Collider& Polygon::getTransformedCollider() const {
 		return tranformed_collider;
 	}
 	Collider Polygon::getDefaultSampleCollider() const {
