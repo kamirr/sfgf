@@ -13,7 +13,7 @@ namespace sfgf {
 		void setTexture(const sf::Texture& tex);
 
 		void setSize(sf::Vector2f size);
-		sf::Vector2f getSize();
+		sf::Vector2f getSize() const;
 		void selfCenter();
 	};
 
@@ -38,7 +38,7 @@ namespace sfgf {
 			{0, size.y}
 		});
 	}
-	sf::Vector2f Plane::getSize() {
+	sf::Vector2f Plane::getSize() const {
 		return getVertices()[2].position;
 	}
 	void Plane::selfCenter() {
