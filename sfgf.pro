@@ -11,4 +11,5 @@ HEADERS += \
     SFGF/GameObject.hpp \
     SFGF/Polygon.hpp \
     SFGF/Plane.hpp \
-    SFGF/Collider.hpp
+    SFGF/Collider.hpp \
+    SFGF/ObjectPack.hpp
