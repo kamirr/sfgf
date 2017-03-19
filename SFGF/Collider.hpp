@@ -3,23 +3,71 @@
 
 #include <SFML/Graphics/Transform.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <iostream>
 #include <vector>
 
 namespace sfgf {
 	class Collider {
 		std::vector<sf::Vector2f> m_arr;
+		sf::FloatRect m_globalBounds;
+
+		void updateGlobalBounds() {
+			sf::Vector2f max {0, 0};
+			sf::Vector2f pos {m_arr.empty() ? sf::Vector2f{0, 0} : m_arr[0]};
+
+			for(const sf::Vector2f& pt: m_arr) {
+				max.x = pt.x > max.x ? pt.x : max.x;
+				max.y = pt.y > max.y ? pt.y : max.y;
+
+				pos.x = pt.x < pos.x ? pt.x : pos.x;
+				pos.y = pt.y < pos.y ? pt.y : pos.y;
+			}
+
+			m_globalBounds.top = pos.y;
+			m_globalBounds.left = pos.x;
+			m_globalBounds.width = max.x - pos.x;
+			m_globalBounds.height = max.y - pos.y;
+		}
 
 	public:
+		static Collider circle(float radius, size_t cnt = 128);
+		static Collider rectangle(sf::Vector2f size);
+
 		static bool lineIntersection(sf::Vector2f p1, sf::Vector2f q1, sf::Vector2f p2, sf::Vector2f q2);
 
 		void apply_transform(const sf::Transform& t);
 		void push_back(sf::Vector2f pt);
 		void clear();
 
+		sf::FloatRect getGlobalBounds() const {
+			return m_globalBounds;
+		}
+
 		bool intersects(const Collider& poly);
 		bool contains(sf::Vector2f point);
 		bool collides(const Collider& poly);
 	};
+
+	Collider Collider::circle(float radius, size_t cnt) {
+		Collider result;
+		for(auto i = 0u; i < cnt; ++i) {
+			result.push_back({
+				std::sin(6.28 / cnt * i) * radius + radius,
+				std::cos(6.28 / cnt * i) * radius + radius
+			});
+		}
+
+		return result;
+	}
+	Collider Collider::rectangle(sf::Vector2f size) {
+		Collider result;
+		result.push_back({0, 0});
+		result.push_back({size.x, 0});
+		result.push_back(size);
+		result.push_back({0, size.y});
+
+		return result;
+	}
 
 	bool Collider::lineIntersection(sf::Vector2f p1, sf::Vector2f q1, sf::Vector2f p2, sf::Vector2f q2) {
 		auto isOnSegment = [](sf::Vector2f p, sf::Vector2f q, sf::Vector2f r) {
@@ -68,15 +116,25 @@ namespace sfgf {
 				return t.transformPoint(p);
 			}
 		);
+
+		updateGlobalBounds();
 	}
 	void Collider::push_back(sf::Vector2f pt) {
 		m_arr.push_back(pt);
+		updateGlobalBounds();
 	}
 	void Collider::clear() {
 		m_arr.clear();
+		updateGlobalBounds();
 	}
 
 	bool Collider::intersects(const Collider& poly) {
+		if(!getGlobalBounds().intersects(poly.getGlobalBounds())
+		|| poly.m_arr.empty()
+		|| m_arr.empty()) {
+			return false;
+		}
+
 		auto arr = m_arr;
 		arr.push_back(arr.front());
 
