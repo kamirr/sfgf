@@ -173,6 +173,10 @@ namespace sfgf {
 	}
 
 	bool Collider::collides(const Collider& poly) const {
+		if(!getGlobalBounds().intersects(poly.getGlobalBounds())) {
+			return false;
+		}
+
 		if(intersects(poly)) {
 			return true;
 		}
