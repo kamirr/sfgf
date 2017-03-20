@@ -97,7 +97,7 @@ namespace sfgf {
 	Collider Polygon::getDefaultSampleCollider() const {
 		Collider result;
 		for(const sf::Vertex& v: m_arr) {
-			result.push_back(v.position);
+			result.pushBack(v.position);
 		}
 
 		return result;
@@ -105,7 +105,7 @@ namespace sfgf {
 
 	void Polygon::updateCollider() {
 		tranformed_collider = sample_collider;
-		tranformed_collider.apply_transform(getTransform());
+		tranformed_collider.applyTransform(getTransform());
 	}
 	void Polygon::update(sf::Time) {
 		updateCollider();

@@ -24,7 +24,15 @@ namespace sfgf {
 	//! Also supports globalBounds to make collision detection more efficient. <br />
 	//! Sample code:
 	//! \code{.cpp}
-	//! /*TO DO*/
+	//! auto circle = sfgf::Collider::circle(5); // Make circle, r = 5
+	//! auto rect = sfgf::Collider::rectangle({10, 10}); // Make rectangle (10, 10)
+	//!
+	//! auto t = sf::Transform().translate({9, 0}); // Make transform translating by 9 to the right
+	//! circle.applyTransform(t); // Apply that transform to circle
+	//!
+	//! std::cout << std::boolalpha << circle.collides(rect) << std::endl; //True
+	//! circle.applyTransform(t); // Apply transform again
+	//! std::cout << std::boolalpha << circle.collides(rect) << std::endl; //False
 	//! \endcode
 	class Collider {
 		std::vector<sf::Vector2f> m_arr;
@@ -76,31 +84,103 @@ namespace sfgf {
 		//! \param [in] radius – radius of circle
 		//! \param [in] cnt – count of points to make
 		//!
+		//! \returns new collider
+		//!
 		//! \code{.cpp}
 		//! somePolygon.setSampleCollider(sfgf::Collider::circle(7));
 		//! \endcode
 		static Collider circle(float radius, size_t cnt = 128);
+
+		//! \brief Returns collider in shape of rectangle
+		//! \param [in] size – dimensions of rectangle
+		//!
+		//! \returns new collider
+		//!
+		//! \code{.cpp}
+		//! somePolygon.setSampleCollider(sfgf::Collider::rectangle({20, 10}));
+		//! \endcode
 		static Collider rectangle(sf::Vector2f size);
 
+		//! \brief Check two lines for intersection
+		//! \param [in] p1 – beginning of line I
+		//! \param [in] q1 – end of line I
+		//! \param [in] p2 – beginning of line II
+		//! \param [in] q2 – end of line II
+		//!
+		//! \returns True if lines intersect, False otherwise
+		//!
+		//! \code{.cpp}
+		//! std::cout << std::boolapha << sfgf::Collider::lineIntersection({0, 0}, {50, 20}, {25, 0}, {25 50}) << std::endl;
+		//! \endcode
 		static bool lineIntersection(sf::Vector2f p1, sf::Vector2f q1, sf::Vector2f p2, sf::Vector2f q2);
 
-		void apply_transform(const sf::Transform& t);
-		void push_back(sf::Vector2f pt);
+		//! \brief Applies transform
+		//! \param [in] t – transform to use
+		//!
+		//! Used to adjust position/rotation/scale of collider to actual object.<br />
+		//! Sample code:
+		//! \code{.cpp}
+		//! this->collider.applyTransform(this->polygon.getTransform());
+		//! \endcode
+		void applyTransform(const sf::Transform& t);
+
+		//! \brief Adds point to internal array
+		//! \param [in] pt – coordinates in local system
+		//!
+		//! Can be used to create collider in non–standard shape, aka custom polygon. <br />
+		//! Sample code:
+		//! \code{.cpp}
+		//! while(inputFile >> x >> y) {
+		//!		collider.pushBack({x, y});
+		//! }
+		//! \endcode
+		void pushBack(sf::Vector2f pt);
+
+		//! \brief Clears points
+		//!
+		//! Simply clears internal array (std::vector), empty collider never detects any collision.
 		void clear();
 
+		//! \brief Returns global bounds
+		//!
+		//! Get the global bounding rectangle of the entity. <br />
+		//! The returned rectangle is in global coordinates, which means that it takes in account the transformations (translation, rotation, scale, …) that are applied to the entity.
+		//! In other words, this function returns the bounds of the collider in the global 2D world's coordinate system.
+		//!
+		//! \returns Global bounding rectangle of the entity
 		sf::FloatRect getGlobalBounds() const {
 			return m_globalBounds;
 		}
 
+		//! \brief Check for intersection
+		//! \param [in] poly – collider to check
+		//!
+		//! Tests if any side of (*this) intersects with any side of poly.
+		//!
+		//! \returns True if colliders intersect, False otherwise
 		bool intersects(const Collider& poly) const;
+
+		//! \brief Check if point is inside of collider
+		//! \param [in] point – point to check
+		//!
+		//! Tests if given point is inside of (*this).
+		//!
+		//! \returns True if point is in collider, false otherwise
 		bool contains(sf::Vector2f point) const;
+
+		//! \brief Check if two colliders collide
+		//! \param [in] poly – collider to check against
+		//!
+		//! Tests whether colliders collide or not. They do, if any of theirs side intersect or if no point of one collider is outside of another.
+		//!
+		//! \returns True if they collide, False otherwise.
 		bool collides(const Collider& poly) const;
 	};
 
 	Collider Collider::circle(float radius, size_t cnt) {
 		Collider result;
 		for(auto i = 0u; i < cnt; ++i) {
-			result.push_back({
+			result.pushBack({
 				std::sin(6.28 / cnt * i) * radius + radius,
 				std::cos(6.28 / cnt * i) * radius + radius
 			});
@@ -110,10 +190,10 @@ namespace sfgf {
 	}
 	Collider Collider::rectangle(sf::Vector2f size) {
 		Collider result;
-		result.push_back({0, 0});
-		result.push_back({size.x, 0});
-		result.push_back(size);
-		result.push_back({0, size.y});
+		result.pushBack({0, 0});
+		result.pushBack({size.x, 0});
+		result.pushBack(size);
+		result.pushBack({0, size.y});
 
 		return result;
 	}
@@ -156,7 +236,7 @@ namespace sfgf {
 		return false;
 	}
 
-	void Collider::apply_transform(const sf::Transform& t) {
+	void Collider::applyTransform(const sf::Transform& t) {
 		std::transform(
 			m_arr.begin(),
 			m_arr.end(),
@@ -168,7 +248,7 @@ namespace sfgf {
 
 		updateGlobalBounds();
 	}
-	void Collider::push_back(sf::Vector2f pt) {
+	void Collider::pushBack(sf::Vector2f pt) {
 		m_arr.push_back(pt);
 		updateGlobalBounds();
 	}
