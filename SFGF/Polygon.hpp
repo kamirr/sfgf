@@ -1,6 +1,11 @@
 #ifndef POLYGON_HPP
 #define POLYGON_HPP
 
+/* =========================================================== *
+ * SFGF (c) Kamil Koczurek | koczurekk@gmail.com               *
+ * GNU GPL v3 License http://www.gnu.org/licenses/gpl-3.0.html *
+ * =========================================================== */
+
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Vertex.hpp>

@@ -1,6 +1,11 @@
 #ifndef PLANE_HPP
 #define PLANE_HPP
 
+/* =========================================================== *
+ * SFGF (c) Kamil Koczurek | koczurekk@gmail.com               *
+ * GNU GPL v3 License http://www.gnu.org/licenses/gpl-3.0.html *
+ * =========================================================== */
+
 #include <SFML/Graphics/Texture.hpp>
 #include "Polygon.hpp"
 

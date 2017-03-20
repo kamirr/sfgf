@@ -1,6 +1,11 @@
 #ifndef COLLIDER_HPP
 #define COLLIDER_HPP
 
+/* =========================================================== *
+ * SFGF (c) Kamil Koczurek | koczurekk@gmail.com               *
+ * GNU GPL v3 License http://www.gnu.org/licenses/gpl-3.0.html *
+ * =========================================================== */
+
 #include <SFML/Graphics/Transform.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <iostream>
