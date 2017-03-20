@@ -1,0 +1,280 @@
+\hypertarget{classsfgf_1_1Collider}{}\section{sfgf\+:\+:Collider Class Reference}
+\label{classsfgf_1_1Collider}\index{sfgf\+::\+Collider@{sfgf\+::\+Collider}}
+
+
+Handles collisions.  
+
+
+
+
+{\ttfamily \#include $<$Collider.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classsfgf_1_1Collider_ab76aa2334b97723309dec9c06f13e5aa}{apply\+Transform} (const sf\+::\+Transform \&t)
+\begin{DoxyCompactList}\small\item\em Applies transform. \end{DoxyCompactList}\item 
+void \hyperlink{classsfgf_1_1Collider_ac7ada2ab00581dccb5d4590d0ec80d57}{push\+Back} (sf\+::\+Vector2f pt)
+\begin{DoxyCompactList}\small\item\em Adds point to internal array. \end{DoxyCompactList}\item 
+void \hyperlink{classsfgf_1_1Collider_a4db86f18fef1c67dfa2523f106096fc8}{clear} ()
+\begin{DoxyCompactList}\small\item\em Clears points. \end{DoxyCompactList}\item 
+sf\+::\+Float\+Rect \hyperlink{classsfgf_1_1Collider_a7625649032857e18d7b27bd7bed18c24}{get\+Global\+Bounds} () const 
+\begin{DoxyCompactList}\small\item\em Returns global bounds. \end{DoxyCompactList}\item 
+bool \hyperlink{classsfgf_1_1Collider_ad6a628c00cfd66ccb06792c91305007e}{intersects} (const \hyperlink{classsfgf_1_1Collider}{Collider} \&poly) const 
+\begin{DoxyCompactList}\small\item\em Check for intersection. \end{DoxyCompactList}\item 
+bool \hyperlink{classsfgf_1_1Collider_af193ced12d857c8cec6f604ae4d9c905}{contains} (sf\+::\+Vector2f point) const 
+\begin{DoxyCompactList}\small\item\em Check if point is inside of collider. \end{DoxyCompactList}\item 
+bool \hyperlink{classsfgf_1_1Collider_a51b98794c87237d2cbf4cf3fdbfd2c62}{collides} (const \hyperlink{classsfgf_1_1Collider}{Collider} \&poly) const 
+\begin{DoxyCompactList}\small\item\em Check if two colliders collide. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classsfgf_1_1Collider}{Collider} \hyperlink{classsfgf_1_1Collider_a22251044e824c236f250689c4023c992}{circle} (float radius, size\+\_\+t cnt=128)
+\begin{DoxyCompactList}\small\item\em Returns collider in shape of circle. \end{DoxyCompactList}\item 
+static \hyperlink{classsfgf_1_1Collider}{Collider} \hyperlink{classsfgf_1_1Collider_aaf00da4b750ec490048de061c98d8ad0}{rectangle} (sf\+::\+Vector2f size)
+\begin{DoxyCompactList}\small\item\em Returns collider in shape of rectangle. \end{DoxyCompactList}\item 
+static bool \hyperlink{classsfgf_1_1Collider_a2e1731b6dfd829261e763154e5a27904}{line\+Intersection} (sf\+::\+Vector2f p1, sf\+::\+Vector2f q1, sf\+::\+Vector2f p2, sf\+::\+Vector2f q2)
+\begin{DoxyCompactList}\small\item\em Check two lines for intersection. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handles collisions. 
+
+Contains basic set of points which can be later transformed to represent bounds of an object. Also supports global\+Bounds to make collision detection more efficient. ~\newline
+ Sample code\+: 
+\begin{DoxyCode}
+\textcolor{keyword}{auto} \hyperlink{classsfgf_1_1Collider_a22251044e824c236f250689c4023c992}{circle} = \hyperlink{classsfgf_1_1Collider_a22251044e824c236f250689c4023c992}{sfgf::Collider::circle}(5); \textcolor{comment}{// Make circle, r = 5}
+\textcolor{keyword}{auto} rect = \hyperlink{classsfgf_1_1Collider_aaf00da4b750ec490048de061c98d8ad0}{sfgf::Collider::rectangle}(\{10, 10\}); \textcolor{comment}{// Make rectangle (10, 10)}
+
+\textcolor{keyword}{auto} t = sf::Transform().translate(\{9, 0\}); \textcolor{comment}{// Make transform translating by 9 to the right}
+\hyperlink{classsfgf_1_1Collider_a22251044e824c236f250689c4023c992}{circle}.\hyperlink{classsfgf_1_1Collider_ab76aa2334b97723309dec9c06f13e5aa}{applyTransform}(t); \textcolor{comment}{// Apply that transform to circle}
+
+std::cout << std::boolalpha << \hyperlink{classsfgf_1_1Collider_a22251044e824c236f250689c4023c992}{circle}.\hyperlink{classsfgf_1_1Collider_a51b98794c87237d2cbf4cf3fdbfd2c62}{collides}(rect) << std::endl; \textcolor{comment}{//True}
+\hyperlink{classsfgf_1_1Collider_a22251044e824c236f250689c4023c992}{circle}.\hyperlink{classsfgf_1_1Collider_ab76aa2334b97723309dec9c06f13e5aa}{applyTransform}(t); \textcolor{comment}{// Apply transform again}
+std::cout << std::boolalpha << \hyperlink{classsfgf_1_1Collider_a22251044e824c236f250689c4023c992}{circle}.\hyperlink{classsfgf_1_1Collider_a51b98794c87237d2cbf4cf3fdbfd2c62}{collides}(rect) << std::endl; \textcolor{comment}{//False}
+\end{DoxyCode}
+ 
+
+\subsection{Member Function Documentation}
+\index{sfgf\+::\+Collider@{sfgf\+::\+Collider}!apply\+Transform@{apply\+Transform}}
+\index{apply\+Transform@{apply\+Transform}!sfgf\+::\+Collider@{sfgf\+::\+Collider}}
+\subsubsection[{\texorpdfstring{apply\+Transform(const sf\+::\+Transform \&t)}{applyTransform(const sf::Transform &t)}}]{\setlength{\rightskip}{0pt plus 5cm}void sfgf\+::\+Collider\+::apply\+Transform (
+\begin{DoxyParamCaption}
+\item[{const sf\+::\+Transform \&}]{t}
+\end{DoxyParamCaption}
+)}\hypertarget{classsfgf_1_1Collider_ab76aa2334b97723309dec9c06f13e5aa}{}\label{classsfgf_1_1Collider_ab76aa2334b97723309dec9c06f13e5aa}
+
+
+Applies transform. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em t} & – transform to use\\
+\hline
+\end{DoxyParams}
+Used to adjust position/rotation/scale of collider to actual object.~\newline
+ Sample code\+: 
+\begin{DoxyCode}
+this->collider.applyTransform(this->polygon.getTransform());
+\end{DoxyCode}
+ \index{sfgf\+::\+Collider@{sfgf\+::\+Collider}!circle@{circle}}
+\index{circle@{circle}!sfgf\+::\+Collider@{sfgf\+::\+Collider}}
+\subsubsection[{\texorpdfstring{circle(float radius, size\+\_\+t cnt=128)}{circle(float radius, size_t cnt=128)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Collider} sfgf\+::\+Collider\+::circle (
+\begin{DoxyParamCaption}
+\item[{float}]{radius, }
+\item[{size\+\_\+t}]{cnt = {\ttfamily 128}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{classsfgf_1_1Collider_a22251044e824c236f250689c4023c992}{}\label{classsfgf_1_1Collider_a22251044e824c236f250689c4023c992}
+
+
+Returns collider in shape of circle. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em radius} & – radius of circle \\
+\hline
+\mbox{\tt in}  & {\em cnt} & – count of points to make\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+new collider
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+somePolygon.setSampleCollider(\hyperlink{classsfgf_1_1Collider_a22251044e824c236f250689c4023c992}{sfgf::Collider::circle}(7));
+\end{DoxyCode}
+ \index{sfgf\+::\+Collider@{sfgf\+::\+Collider}!clear@{clear}}
+\index{clear@{clear}!sfgf\+::\+Collider@{sfgf\+::\+Collider}}
+\subsubsection[{\texorpdfstring{clear()}{clear()}}]{\setlength{\rightskip}{0pt plus 5cm}void sfgf\+::\+Collider\+::clear (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classsfgf_1_1Collider_a4db86f18fef1c67dfa2523f106096fc8}{}\label{classsfgf_1_1Collider_a4db86f18fef1c67dfa2523f106096fc8}
+
+
+Clears points. 
+
+Simply clears internal array (std\+::vector), empty collider never detects any collision. \index{sfgf\+::\+Collider@{sfgf\+::\+Collider}!collides@{collides}}
+\index{collides@{collides}!sfgf\+::\+Collider@{sfgf\+::\+Collider}}
+\subsubsection[{\texorpdfstring{collides(const Collider \&poly) const }{collides(const Collider &poly) const }}]{\setlength{\rightskip}{0pt plus 5cm}bool sfgf\+::\+Collider\+::collides (
+\begin{DoxyParamCaption}
+\item[{const {\bf Collider} \&}]{poly}
+\end{DoxyParamCaption}
+) const}\hypertarget{classsfgf_1_1Collider_a51b98794c87237d2cbf4cf3fdbfd2c62}{}\label{classsfgf_1_1Collider_a51b98794c87237d2cbf4cf3fdbfd2c62}
+
+
+Check if two colliders collide. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em poly} & – collider to check against\\
+\hline
+\end{DoxyParams}
+Tests whether colliders collide or not. They do, if any of theirs side intersect or if no point of one collider is outside of another.
+
+\begin{DoxyReturn}{Returns}
+True if they collide, False otherwise. 
+\end{DoxyReturn}
+\index{sfgf\+::\+Collider@{sfgf\+::\+Collider}!contains@{contains}}
+\index{contains@{contains}!sfgf\+::\+Collider@{sfgf\+::\+Collider}}
+\subsubsection[{\texorpdfstring{contains(sf\+::\+Vector2f point) const }{contains(sf::Vector2f point) const }}]{\setlength{\rightskip}{0pt plus 5cm}bool sfgf\+::\+Collider\+::contains (
+\begin{DoxyParamCaption}
+\item[{sf\+::\+Vector2f}]{point}
+\end{DoxyParamCaption}
+) const}\hypertarget{classsfgf_1_1Collider_af193ced12d857c8cec6f604ae4d9c905}{}\label{classsfgf_1_1Collider_af193ced12d857c8cec6f604ae4d9c905}
+
+
+Check if point is inside of collider. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em point} & – point to check\\
+\hline
+\end{DoxyParams}
+Tests if given point is inside of ($\ast$this).
+
+\begin{DoxyReturn}{Returns}
+True if point is in collider, false otherwise 
+\end{DoxyReturn}
+\index{sfgf\+::\+Collider@{sfgf\+::\+Collider}!get\+Global\+Bounds@{get\+Global\+Bounds}}
+\index{get\+Global\+Bounds@{get\+Global\+Bounds}!sfgf\+::\+Collider@{sfgf\+::\+Collider}}
+\subsubsection[{\texorpdfstring{get\+Global\+Bounds() const }{getGlobalBounds() const }}]{\setlength{\rightskip}{0pt plus 5cm}sf\+::\+Float\+Rect sfgf\+::\+Collider\+::get\+Global\+Bounds (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classsfgf_1_1Collider_a7625649032857e18d7b27bd7bed18c24}{}\label{classsfgf_1_1Collider_a7625649032857e18d7b27bd7bed18c24}
+
+
+Returns global bounds. 
+
+Get the global bounding rectangle of the entity. ~\newline
+ The returned rectangle is in global coordinates, which means that it takes in account the transformations (translation, rotation, scale, …) that are applied to the entity. In other words, this function returns the bounds of the collider in the global 2D world\textquotesingle{}s coordinate system.
+
+\begin{DoxyReturn}{Returns}
+Global bounding rectangle of the entity 
+\end{DoxyReturn}
+\index{sfgf\+::\+Collider@{sfgf\+::\+Collider}!intersects@{intersects}}
+\index{intersects@{intersects}!sfgf\+::\+Collider@{sfgf\+::\+Collider}}
+\subsubsection[{\texorpdfstring{intersects(const Collider \&poly) const }{intersects(const Collider &poly) const }}]{\setlength{\rightskip}{0pt plus 5cm}bool sfgf\+::\+Collider\+::intersects (
+\begin{DoxyParamCaption}
+\item[{const {\bf Collider} \&}]{poly}
+\end{DoxyParamCaption}
+) const}\hypertarget{classsfgf_1_1Collider_ad6a628c00cfd66ccb06792c91305007e}{}\label{classsfgf_1_1Collider_ad6a628c00cfd66ccb06792c91305007e}
+
+
+Check for intersection. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em poly} & – collider to check\\
+\hline
+\end{DoxyParams}
+Tests if any side of ($\ast$this) intersects with any side of poly.
+
+\begin{DoxyReturn}{Returns}
+True if colliders intersect, False otherwise 
+\end{DoxyReturn}
+\index{sfgf\+::\+Collider@{sfgf\+::\+Collider}!line\+Intersection@{line\+Intersection}}
+\index{line\+Intersection@{line\+Intersection}!sfgf\+::\+Collider@{sfgf\+::\+Collider}}
+\subsubsection[{\texorpdfstring{line\+Intersection(sf\+::\+Vector2f p1, sf\+::\+Vector2f q1, sf\+::\+Vector2f p2, sf\+::\+Vector2f q2)}{lineIntersection(sf::Vector2f p1, sf::Vector2f q1, sf::Vector2f p2, sf::Vector2f q2)}}]{\setlength{\rightskip}{0pt plus 5cm}bool sfgf\+::\+Collider\+::line\+Intersection (
+\begin{DoxyParamCaption}
+\item[{sf\+::\+Vector2f}]{p1, }
+\item[{sf\+::\+Vector2f}]{q1, }
+\item[{sf\+::\+Vector2f}]{p2, }
+\item[{sf\+::\+Vector2f}]{q2}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{classsfgf_1_1Collider_a2e1731b6dfd829261e763154e5a27904}{}\label{classsfgf_1_1Collider_a2e1731b6dfd829261e763154e5a27904}
+
+
+Check two lines for intersection. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em p1} & – beginning of line I \\
+\hline
+\mbox{\tt in}  & {\em q1} & – end of line I \\
+\hline
+\mbox{\tt in}  & {\em p2} & – beginning of line II \\
+\hline
+\mbox{\tt in}  & {\em q2} & – end of line II\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if lines intersect, False otherwise
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+std::cout << std::boolapha << \hyperlink{classsfgf_1_1Collider_a2e1731b6dfd829261e763154e5a27904}{sfgf::Collider::lineIntersection}(\{0, 0\}, \{50,
+       20\}, \{25, 0\}, \{25 50\}) << std::endl;
+\end{DoxyCode}
+ \index{sfgf\+::\+Collider@{sfgf\+::\+Collider}!push\+Back@{push\+Back}}
+\index{push\+Back@{push\+Back}!sfgf\+::\+Collider@{sfgf\+::\+Collider}}
+\subsubsection[{\texorpdfstring{push\+Back(sf\+::\+Vector2f pt)}{pushBack(sf::Vector2f pt)}}]{\setlength{\rightskip}{0pt plus 5cm}void sfgf\+::\+Collider\+::push\+Back (
+\begin{DoxyParamCaption}
+\item[{sf\+::\+Vector2f}]{pt}
+\end{DoxyParamCaption}
+)}\hypertarget{classsfgf_1_1Collider_ac7ada2ab00581dccb5d4590d0ec80d57}{}\label{classsfgf_1_1Collider_ac7ada2ab00581dccb5d4590d0ec80d57}
+
+
+Adds point to internal array. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em pt} & – coordinates in local system\\
+\hline
+\end{DoxyParams}
+Can be used to create collider in non–standard shape, aka custom polygon. ~\newline
+ Sample code\+: 
+\begin{DoxyCode}
+\textcolor{keywordflow}{while}(inputFile >> x >> y) \{
+    collider.pushBack(\{x, y\});
+\}
+\end{DoxyCode}
+ \index{sfgf\+::\+Collider@{sfgf\+::\+Collider}!rectangle@{rectangle}}
+\index{rectangle@{rectangle}!sfgf\+::\+Collider@{sfgf\+::\+Collider}}
+\subsubsection[{\texorpdfstring{rectangle(sf\+::\+Vector2f size)}{rectangle(sf::Vector2f size)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Collider} sfgf\+::\+Collider\+::rectangle (
+\begin{DoxyParamCaption}
+\item[{sf\+::\+Vector2f}]{size}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{classsfgf_1_1Collider_aaf00da4b750ec490048de061c98d8ad0}{}\label{classsfgf_1_1Collider_aaf00da4b750ec490048de061c98d8ad0}
+
+
+Returns collider in shape of rectangle. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em size} & – dimensions of rectangle\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+new collider
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+somePolygon.setSampleCollider(\hyperlink{classsfgf_1_1Collider_aaf00da4b750ec490048de061c98d8ad0}{sfgf::Collider::rectangle}(\{20, 10\}));
+\end{DoxyCode}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+S\+F\+G\+F/\hyperlink{Collider_8hpp}{Collider.\+hpp}\end{DoxyCompactItemize}
