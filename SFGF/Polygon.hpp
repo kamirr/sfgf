@@ -81,6 +81,7 @@ namespace sfgf {
 
 	void Polygon::setSampleCollider(const Collider& c) {
 		sample_collider = c;
+		tranformed_collider = c;
 	}
 	const Collider& Polygon::getSampleCollider() const {
 		return sample_collider;
