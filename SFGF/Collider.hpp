@@ -6,12 +6,26 @@
  * GNU GPL v3 License http://www.gnu.org/licenses/gpl-3.0.html *
  * =========================================================== */
 
+//! @file
+//! \brief Collider class implementation
+
 #include <SFML/Graphics/Transform.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <iostream>
 #include <vector>
 
+//! \namespace sfgf
+//! \brief Contains all SFGF classes
 namespace sfgf {
+	//! \class Collider
+	//! \brief Handles collisions
+	//!
+	//! Contains basic set of points which can be later transformed to represent bounds of an object.
+	//! Also supports globalBounds to make collision detection more efficient. <br />
+	//! Sample code:
+	//! \code{.cpp}
+	//! /*TO DO*/
+	//! \endcode
 	class Collider {
 		std::vector<sf::Vector2f> m_arr;
 		sf::FloatRect m_globalBounds;
@@ -58,6 +72,13 @@ namespace sfgf {
 		}
 
 	public:
+		//! \brief Returns collider in shape of circle
+		//! \param [in] radius – radius of circle
+		//! \param [in] cnt – count of points to make
+		//!
+		//! \code{.cpp}
+		//! somePolygon.setSampleCollider(sfgf::Collider::circle(7));
+		//! \endcode
 		static Collider circle(float radius, size_t cnt = 128);
 		static Collider rectangle(sf::Vector2f size);
 
