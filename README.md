@@ -14,3 +14,6 @@ I really wanted to have some more complex game–related API on top on SFML, cou
 
 ## Collaboration
 I'm open to proposals, if you want to add something from yourself post a feature request in 'Issues' tab or e–mail me (koczurekk@gmail.com).
+
+## documentation
+Right… [here](https://koczurekk.github.io/sfgf/)!
