@@ -11,6 +11,20 @@
 #include "CopyLock.hpp"
 
 namespace sfgf {
+	//! \brief Base class for game objects
+	//!
+	//! Inherits sf::Transformable and supports child–parent relation. <br />
+	//! Can be used to write custom entities compatible with sfgf API:
+	//! \code{.cpp}
+	//! class MahObject
+	//!	: public sfgf::GameObject {
+	//!		virtual void update(sf::Time t) {
+	//!			std::cout << "FPS: " << 1.f / t.asSeconds() << std::endl;
+	//!		}
+	//! }
+	//! \endcode
+	//!
+	//! Instances of sfgf::GameObject are not copyable due to usage of sfgf::CopyLock.
 	class GameObject
 		: public sf::Transformable {
 	private:
@@ -20,13 +34,32 @@ namespace sfgf {
 	public:
 		virtual ~GameObject() {}
 
-		virtual void update(sf::Time);
+		//! \brief Meant to be called every frame
+		//!
+		//! \param [in] dt – Delta time between (logical) frames
+		//!
+		//! Virtual function makes it easier to pack objects into sfgf::ObjectPack and enables them to be updated together.
+		//! Should be overwritten in new entity that changes its behavior based on time passing by.
+		virtual void update(sf::Time dt);
 
+		//! \brief Sets parent
+		//!
+		//! \param [in] parent – sfgf::GameObject to be used as parent
+		//!
+		//! All transformations are applied as if parent coordinates were center of coordinate system and it was rotated by its angle etc. <br />
+		//! Long story short: Works same way as any parent–children hierarchy in any decent engine
+		//! (i.e. <a href="https://unity3d.com/">Unity</a>, <a href="https://www.unrealengine.com/what-is-unreal-engine-4">Unreal</a>).
 		void setParent(const GameObject& parent);
+
+		//! \brief Access parent
+		//! \returns Const reference to parent
 		const GameObject& getParent() const;
 
+		//! \brief Access transform
+		//! \returns Internal transform multiplied by parent's transform (or not if there's no parent set).
 		sf::Transform getTransform() const;
 	};
+
 	void GameObject::update(sf::Time)
 	{ }
 
