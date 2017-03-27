@@ -1,4 +1,5 @@
 *qmake.stash
+callgrind.*
 *.pro.user
 Makefile
 sfgf
