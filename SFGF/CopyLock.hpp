@@ -7,6 +7,9 @@
  * =========================================================== */
 
 namespace sfgf {
+	//! \brief Non–copyable class
+	//!
+	//! Used as member in classes that are meant to be non–copyable, not a part of private API thus may be used in normal code.
 	class CopyLock {
 	private:
 		void operator=(const CopyLock&) = delete;
@@ -14,6 +17,9 @@ namespace sfgf {
 		CopyLock(CopyLock&&) = delete;
 
 	public:
+		//! \brief Default–default constructor
+		//!
+		//! Does pretty much nothing
 		CopyLock() = default;
 	};
 }
